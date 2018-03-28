@@ -1,0 +1,55 @@
+# -- coding:utf-8 --
+# 第 0005 题： 你有一个目录，装了很多照片，把它们的尺寸变成都不大于 iPhone5 分辨率的大小。
+
+import os
+from PIL import Image	## 图像处理库
+
+os.chdir( r"D:\Python_Working_Directory\Data\Little Train")
+
+
+def loop_folder( path):
+	## 遍历文件夹
+	filename_list = []
+	for root, dirs, files in os.walk( path):
+	    # root： 获取当前路径
+	    # dirs： 获取子目录( 子文件夹)
+	    # files： 获取当前目录下的文件名
+	    for i in files:
+	    	filename_list.append( i)
+	return( filename_list)
+
+print( loop_folder( os.getcwd()) )
+
+
+img = Image.open( 'a71ea8d3fd1f41342207c5d42f1f95cad1c85e6c.jpg')	## 打开图片
+# img.show()	## 显示图片
+
+print( img.size)  #图片的尺寸
+print( img.mode)  #图片的模式
+print( img.format)  #图片的格式
+
+
+def modify_picture( filename_list, picture_height, picture_width):
+	for filename in filename_list:
+		img = Image.open( filename)	## 打开图片
+
+		height = img.size[1]
+		width = img.size[0]
+		
+		print( "Picture %s: This picture's size is: height - %d; width - %d." %( filename, height, width))
+
+
+		if height < picture_height:
+			img = img.resize( ( picture_height, height), Image.ANTIALIAS) #resize image with high-quality
+			print( "Picture %s: Change Height parameter to %d" %( filename, picture_height))
+		else:
+			print( "Picture %s: Height parameter is Correct." % filename)
+
+		if width < picture_width:
+			img = img.resize( ( width, picture_width), Image.ANTIALIAS) #resize image with high-quality
+			print( "Picture %s: Change Width parameter to %d" %( filename, picture_width))
+		else:
+			print( "Picture %s: Width parameter is Correct." % filename)
+		img.save( str( os.getcwd() + '/New/' + filename))
+
+modify_picture( loop_folder( os.getcwd()), 1136, 640)
