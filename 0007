@@ -1,0 +1,42 @@
+# -- coding:utf-8 --
+# 第 0007 题： 有个目录，里面是你自己写过的程序，统计一下你写过多少行代码。包括空行和注释，但是要分别列出来。
+
+import os
+import re
+
+os.chdir( r"D:\Python_Working_Directory\Code")
+
+def loop_folder( path):
+	## 遍历文件夹
+	filename_list = []
+	for i in os.listdir( path):
+	    filename_list.append( i)
+	return( filename_list)
+
+print( loop_folder( os.getcwd()))
+
+
+def linesnum_count( filename_list):
+	all_line = 0
+	space_line = 0
+	exp_line = 0
+
+	for f in filename_list:
+		if ".py" in f:
+			
+			file = open( f, 'r', encoding = 'utf-8')	## encoding： 针对于以 'utf-8' 编码保存的 txt 文件。
+			lines = file.readlines()
+
+			for i in lines:
+				all_line += 1
+
+				if i.strip() == '':		## strip() 去除首尾指定字符，默认为空格。
+					space_line += 1
+
+				if "#" in i:
+					exp_line += 1
+		pass
+		print( f, all_line, space_line, exp_line)
+
+
+linesnum_count( loop_folder( os.getcwd()))
