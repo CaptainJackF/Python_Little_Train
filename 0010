@@ -1,0 +1,60 @@
+# -- coding:utf-8 --
+# 第 0010 题： 使用 Python 生成类似于下图中的字母验证码图片
+
+from PIL import Image, ImageDraw, ImageFont, ImageFilter	## 图像处理库
+import random, string
+
+# 创建图片
+
+
+## 随机字母&数字
+def rnd_Char():
+	return( random.choice( string.ascii_letters + "0123456789" ))
+
+## 随机颜色
+def rnd_Color():
+	return( random.randint( 30,90), random.randint( 30,90), random.randint( 30,90))
+
+## 随机颜色2
+def rnd_Color2():
+	return( random.randint( 64,255), random.randint( 64,255), random.randint( 64,255))
+
+## 随机位置
+def rnd_wifth():
+	return( random.randint( -10,50))
+def rnd_height():
+	return( random.randint( 10,30))
+
+## 随机线
+def rnd_line():
+	return( ( 0, random.randint( 0,60), 240, random.randint( 0,60)))
+
+## 定义字体
+font = ImageFont.truetype( "LiberationSansNarrow-BoldItalic.ttf", 28)
+
+# 240 * 60 
+## 使用 Image 类实例化一个长为 400，高为 200的，基于 RGB的 (255,255,255)颜色图片
+img = Image.new( mode = "RGB", size = ( 240, 60), color = ( 255, 255, 255)) 
+
+
+# 创建画笔
+## 用于生成图片上的内容
+draw = ImageDraw.Draw( img)
+
+
+# 填充像素
+for x in range( 240):
+	for y in range( 60):
+		draw.point( (x,y), fill = rnd_Color2())
+
+# 输入文字
+for t in range(4):
+	draw.text( ( 60*t + rnd_wifth(), rnd_height()), rnd_Char(), font = font, fill = rnd_Color())
+
+# 画线干扰
+draw.line( rnd_line(), fill = rnd_Color())
+
+# 模糊处理
+#img = img.filter( ImageFilter.BLUR)
+
+img.show()
