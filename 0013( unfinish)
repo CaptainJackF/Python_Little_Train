@@ -1,0 +1,49 @@
+# -- coding:utf-8 --
+# Web Crawl Train
+
+import os
+import re
+import requests
+from bs4 import BeautifulSoup
+import urllib 
+
+os.chdir( r"D:\Python_Working_Directory\Data")
+
+head = {
+	'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+	}
+url = str( r'https://www.zhihu.com/question/35931586/answer/206258333')
+
+html = requests.get( url, headers = head)	## 以get 的方式获取网页源代码
+html.encoding = 'utf-8'		## 修改源代码的编码，防止数据乱码
+html_text = html.text 		## 获取html代码
+
+soup = BeautifulSoup( html_text, 'lxml')	## 利用 lxml 解析器解析 HTML代码
+
+
+print( soup.title)			## 网页title（标题）
+
+name = 1
+for i in soup.find_all( 'img'):
+	picture_link = i.get( 'data-original')		## 获取图片地址
+	#urllib.request.urlretrieve( picture_link, name)    #下载
+	#urllib.request.urlretrieve( picture_link, str( str( name) + '.jpg'))
+	print( i)
+	name += 1
+
+
+print( '------------------------')
+
+link_list = soup.select( "div[class='RichContent-inner'] span img")[::2]
+#使用CSS选择器提取图片 地址所在节点
+
+name = 1
+for link in link_list:
+    mylink = link.get( 'data-original')   #使用get方法提取图片地址：
+    #name=re.findall(r"v2-.*?\.jpg",mylink)[0]   #匹配图片名称
+    #urllib.request.urlretrieve( mylink, str( str( name) + '.jpg'))    #下载
+    print( link)
+    name += 1
+
+#使用CSS选择器提取图片 地址所在节点
+
