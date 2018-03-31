@@ -1,0 +1,25 @@
+# -- coding:utf-8 --
+# 第 0009 题： 一个HTML文件，找出里面的链接。
+
+import os
+import re
+import requests
+from bs4 import BeautifulSoup
+
+head = {
+	'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+	}
+url = 'http://news.sina.com.cn/w/2018-03-30/doc-ifystuqp3297701.shtml'
+
+html = requests.get( url, headers = head)	## 以get 的方式获取网页源代码
+html.encoding = 'utf-8'		## 修改源代码的编码，防止数据乱码
+html_text = html.text 		## 获取html代码
+
+soup = BeautifulSoup( html_text, 'lxml')	## 利用 lxml 解析器解析 HTML代码
+
+
+print( soup.title)			## 网页title（标题）
+
+
+for i in soup.find_all( "a"):   
+	print( i.get( "href"))
