@@ -1,0 +1,44 @@
+# -- coding:utf-8 --
+## 第 0016 题： 纯文本文件 numbers.txt, 里面的内容（包括方括号）如下所示：
+'''
+[
+	[1, 82, 65535], 
+	[20, 90, 13],
+	[26, 809, 1024]
+]
+'''
+
+x = [
+	[1, 82, 65535], 
+	[20, 90, 13],
+	[26, 809, 1024]
+]
+
+import os, json
+import xlwt
+
+os.chdir( r"D:\Python_Working_Directory\Data")
+
+file = open( 'number.txt', 'r')
+
+'''
+	并非json格式，但是可以用 json.load() 读取，读取后的数据为 list格式而非 dict。
+'''
+number = json.loads( file.read())	
+
+## 创建 excel 对象
+excel = xlwt.Workbook()
+## 新增 工作簿
+sh = excel.add_sheet( 'Number')
+
+i = 0
+for key in number:
+	print( "Processing: ", key)
+	j = 0
+	for values in key:
+		sh.write( i, j, values)
+		j += 1
+	i += 1
+
+## 保存文件
+excel.save( 'number.xls ')
