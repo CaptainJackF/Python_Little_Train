@@ -1,0 +1,22 @@
+# -- coding:utf-8 --
+# 第 0004 题： 任一个英文的纯文本文件，统计其中的单词出现的个数。
+
+import re
+
+New = str( 
+	"A government investigative committee said four people were detained and questioned. " + 
+	"They included tenants of the premises where fire may have started and the head of the management company that serviced the building, Xinhua News Agency reported."
+	)
+
+print( re.split( "[ .,]" , New))
+
+
+di = {}
+
+for i in re.split( "[ .,]" , New):
+	if i in di:
+		di[i] += 1
+	else:
+		di[i] = 1
+
+print( di)
