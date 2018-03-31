@@ -1,0 +1,33 @@
+# -- coding:utf-8 --
+# 第 0015 题： 纯文本文件 city.txt为城市信息, 里面的内容（包括花括号）如下所示：
+'''
+{
+    "1" : "上海",
+    "2" : "北京",
+    "3" : "成都"
+}
+'''
+
+import os, json
+import xlwt
+
+os.chdir( r"D:\Python_Working_Directory\Data")
+
+file = open( 'city.txt', 'r')
+
+student = json.loads( file.read())	## 读取json 格式数据.
+
+## 创建 excel 对象
+excel = xlwt.Workbook()
+## 新增 工作簿
+sh = excel.add_sheet( 'City')
+
+i = 0
+for key, values in student.items():
+	print( key, values)
+	sh.write( i, 0, key)	## 逐个写入
+	sh.write( i, 1, values)	## 逐个写入
+	i += 1
+
+## 保存文件
+excel.save( 'city.xls ')
