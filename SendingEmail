@@ -1,0 +1,93 @@
+# -- coding: utf-8 --
+'''
+	SMTP 是发送邮件的协议，Python内置对SMTP的支持，可以发送纯文本邮件、HTML邮件以及带附件的邮件.
+	Python 对SMTP支持有smtplib和email两个模块，email负责构造邮件，smtplib负责发送邮件。
+'''
+
+# 最简单的纯文本邮件
+import smtplib
+from email import encoders
+from email.header import Header
+from email.mime.text import MIMEText
+from email.mime.multipart  import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.utils import parseaddr, formataddr
+
+def _format_addr(s):
+    name, addr = parseaddr(s)
+    return formataddr((Header(name, 'utf-8').encode(), addr))
+
+# 文件内容 第二个参数是 subtype。'plain' 表示纯文本
+subject = 'Python Email Sending Test'   ## 邮件主题
+from_addr = 'captainjack_f@163.com'     ## 发件人
+password = 'Lightning520'               ## 密码/第三方授权码
+to_addr = ['captainjack_f@163.com']     ## 收件人地址，List形式。
+smtp_server = 'smtp.163.com'            ## SMTP服务器
+smtp_port = 25                          ## 端口
+
+## 纯文本邮件, 构造邮件正文
+msg = MIMEText( "Hello, this email is send by Python..", 'plain', 'utf-8')
+msg['From'] = _format_addr( 'Python爱好者 <%s>' % from_addr)
+msg['To'] = _format_addr( '管理员 <%s>' % to_addr)
+msg['Subject'] = Header( '来自SMTP的问候……', 'utf-8').encode()
+   
+
+## 带附件的邮件, 添加附件
+msg = MIMEMultipart()  ## 构造对象
+msg['From'] = _format_addr( 'Python爱好者 <%s>' % from_addr)
+msg['To'] = _format_addr( '管理员 <%s>' % to_addr)
+msg['Subject'] = Header( '来自SMTP的问候……', 'utf-8').encode()
+# 邮件正文是MIMEText:
+msg.attach( MIMEText( 'send with file...', 'plain', 'utf-8'))
+
+# 添加附件就是加上一个MIMEBase，从本地读取一个图片:
+with open( 'D:/CaptainJack/Photo/下载.png', 'rb') as f:
+    # 设置附件的MIME和文件名，这里是png类型:
+    mime = MIMEBase( 'image', 'png', filename='test.png')
+    # 加上必要的头信息:
+    mime.add_header( 'Content-Disposition', 'attachment', filename='test.png')
+    mime.add_header( 'Content-ID', '<0>')
+    mime.add_header( 'X-Attachment-Id', '0')
+    # 把附件的内容读进来:
+    mime.set_payload( f.read())
+    # 用Base64编码:
+    encoders.encode_base64( mime)
+    # 添加到MIMEMultipart:
+    msg.attach( mime)
+
+
+## 直接发送图片
+msg = MIMEMultipart()  ## 构造对象
+msg['From'] = _format_addr( '翠花 <%s>' % from_addr)
+msg['To'] = _format_addr( '老婆婆 <%s>' % to_addr)
+msg['Subject'] = Header( '抱抱', 'utf-8').encode()
+# 邮件正文是MIMEText:
+msg.attach( MIMEText( '<html><body><h3>老婆婆我爱你~</h3>' +
+                     '<p><img src="cid:0"></p>' +
+                     '</body></html>', 'html', 'utf-8'))
+
+# 添加附件就是加上一个MIMEBase，从本地读取一个图片:
+with open( 'D:/CaptainJack/Photo/下载.png', 'rb') as f:
+    # 设置附件的MIME和文件名，这里是png类型:
+    mime = MIMEBase( 'image', 'png', filename='test.png')
+    # 加上必要的头信息:
+    mime.add_header( 'Content-Disposition', 'attachment', filename='test.png')
+    mime.add_header( 'Content-ID', '<0>')
+    mime.add_header( 'X-Attachment-Id', '0')
+    # 把附件的内容读进来:
+    mime.set_payload( f.read())
+    # 用Base64编码:
+    encoders.encode_base64( mime)
+    # 添加到MIMEMultipart:
+    msg.attach( mime)
+
+
+server = smtplib.SMTP( smtp_server, smtp_port) # SMTP协议默认端口是25
+#server.set_debuglevel( 1)
+
+## Python3中，在登陆前需要用helo 和 elho向服务器进行验证，同时密码一定要和SMTP配套的认证码
+server.helo( smtp_server) 
+server.ehlo( smtp_server)
+server.login( from_addr, password) # 登录到SMTP服务器
+server.sendmail( from_addr, to_addr, msg.as_string())  ## 发送邮件
+server.quit()
