@@ -19,9 +19,9 @@ def _format_addr(s):
 
 # 文件内容 第二个参数是 subtype。'plain' 表示纯文本
 subject = 'Python Email Sending Test'   ## 邮件主题
-from_addr = 'captainjack_f@163.com'     ## 发件人
-password = 'Lightning520'               ## 密码/第三方授权码
-to_addr = ['captainjack_f@163.com']     ## 收件人地址，List形式。
+from_addr = 'cap***@163.com'     ## 发件人
+password = '****'               ## 密码/第三方授权码
+to_addr = ['cap***@163.com']     ## 收件人地址，List形式。
 smtp_server = 'smtp.163.com'            ## SMTP服务器
 smtp_port = 25                          ## 端口
 
@@ -41,7 +41,7 @@ msg['Subject'] = Header( '来自SMTP的问候……', 'utf-8').encode()
 msg.attach( MIMEText( 'send with file...', 'plain', 'utf-8'))
 
 # 添加附件就是加上一个MIMEBase，从本地读取一个图片:
-with open( 'D:/CaptainJack/Photo/下载.png', 'rb') as f:
+with open( 'D:/***/.png', 'rb') as f:
     # 设置附件的MIME和文件名，这里是png类型:
     mime = MIMEBase( 'image', 'png', filename='test.png')
     # 加上必要的头信息:
@@ -67,7 +67,7 @@ msg.attach( MIMEText( '<html><body><h3>老婆婆我爱你~</h3>' +
                      '</body></html>', 'html', 'utf-8'))
 
 # 添加附件就是加上一个MIMEBase，从本地读取一个图片:
-with open( 'D:/CaptainJack/Photo/下载.png', 'rb') as f:
+with open( 'D:/***/.png', 'rb') as f:
     # 设置附件的MIME和文件名，这里是png类型:
     mime = MIMEBase( 'image', 'png', filename='test.png')
     # 加上必要的头信息:
